@@ -118,7 +118,7 @@ def main(_):
     category_index = label_map_util.create_category_index(categories)
     label_map = {}
     for k, v in category_index.items():
-        label_map[v.get("name")] = v.get("id")
+        label_map[v.get("name")] = str(v.get("id"))
 
     grouped = split(examples, "filename")
     for group in grouped:
