@@ -71,12 +71,12 @@ def create_tf_example(group, path, label_map):
         xmaxs.append(row["xmax"] / width)
         ymins.append(row["ymin"] / height)
         ymaxs.append(row["ymax"] / height)
-        classes_text.append(str(row["class"]).encode("utf8"))
-        class_index = label_map.get(row["class"])
+        classes_text.append(bytes(str(row["class"]), "utf-8"))
+        class_index = label_map.get(str(row["class"]))
         assert (
             class_index is not None
         ), "class label: `{}` not found in label_map: {}".format(
-            row["class"], label_map
+            str(row["class"]), label_map
         )
         classes.append(class_index)
 
@@ -118,8 +118,8 @@ def main(_):
     category_index = label_map_util.create_category_index(categories)
     label_map = {}
     for k, v in category_index.items():
-        label_map[v.get("name")] = str(v.get("id"))
-
+        label_map[v.get("name")] = v.get("id")
+        
     grouped = split(examples, "filename")
     for group in grouped:
         tf_example = create_tf_example(group, path, label_map)
